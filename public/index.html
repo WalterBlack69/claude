@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שיעורים פרטיים</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<header>
+  <h1>📚 שיעורים פרטיים</h1>
+  <div id="userbar" hidden><span id="who"></span> <button id="logout" class="link">התנתק</button></div>
+</header>
+<main>
+  <div id="toast" role="status" hidden></div>
+
+  <section id="login" class="card" hidden>
+    <h2>התחברות</h2>
+    <p>התחברו עם חשבון Google (מורים ותלמידים רשומים).</p>
+    <div id="gbtn"></div>
+    <p id="loginerr" class="err"></p>
+  </section>
+
+  <section id="teacher" hidden>
+    <div class="card">
+      <h2>תלמיד חדש</h2>
+      <form id="studentForm" class="grid">
+        <label>שם פרטי <input name="first_name" required></label>
+        <label>שם משפחה <input name="last_name" required></label>
+        <label>טלפון <input name="phone" type="tel" inputmode="tel" placeholder="050-1234567" required></label>
+        <label>מייל (להתחברות התלמיד) <input name="email" type="email" required></label>
+        <button class="primary">הוסף תלמיד</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>קביעת שיעור</h2>
+      <form id="lessonForm" class="grid">
+        <label>תלמיד <select name="student_id" id="studentSelect" required></select></label>
+        <label>תאריך <input name="date" type="date" required></label>
+        <label>שעה <input name="time" type="time" required></label>
+        <label>אופן השיעור
+          <select name="mode" id="modeSelect">
+            <option value="physical">פיזי</option>
+            <option value="zoom">זום</option>
+          </select>
+        </label>
+        <label id="addrField">כתובת <input name="address"></label>
+        <label id="zoomField" hidden>קישור זום <input name="zoom_link" type="url" placeholder="https://zoom.us/j/..."></label>
+        <button class="primary">קבע שיעור ושלח הודעה בוואצפ</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>שיעורים</h2>
+      <div id="lessons" class="list"></div>
+    </div>
+
+    <div class="card">
+      <h2>התלמידים שלי</h2>
+      <div id="students" class="list"></div>
+    </div>
+  </section>
+
+  <section id="student" hidden>
+    <div class="card">
+      <h2>השיעורים שלי</h2>
+      <div id="myLessons" class="list"></div>
+    </div>
+  </section>
+</main>
+<script src="app.js" type="module"></script>
+</body>
+</html>
