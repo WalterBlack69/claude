@@ -4,20 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>שיעורים פרטיים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="style.css">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <header>
-  <h1>📚 שיעורים פרטיים</h1>
+  <h1><span class="logo">📚</span> שיעורים פרטיים</h1>
   <div id="userbar" hidden><span id="who"></span> <button id="logout" class="link">התנתק</button></div>
 </header>
 <main>
   <div id="toast" role="status" hidden></div>
 
-  <section id="login" class="card" hidden>
-    <h2>התחברות</h2>
-    <p>התחברו עם חשבון Google (מורים ותלמידים רשומים).</p>
+  <section id="login" class="card login" hidden>
+    <div class="hero">📚</div>
+    <h2>ברוכים הבאים</h2>
+    <p>התחברו עם חשבון Google כדי לנהל ולצפות בשיעורים.</p>
     <div id="gbtn"></div>
     <p id="loginerr" class="err"></p>
   </section>

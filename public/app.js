@@ -8,6 +8,12 @@ const api = async (url, opts = {}) => {
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (iso) => `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(0, 4)} בשעה ${iso.slice(11, 16)}`;
 const modeText = (l) => (l.mode === 'zoom' ? 'זום' : `פיזי · ${esc(l.address)}`);
+const badge = (l) => `<span class="badge ${l.mode}">${l.mode === 'zoom' ? '💻 זום' : '📍 פיזי'}</span>`;
+const dateBox = (iso) => {
+  const mon = ['ינו','פבר','מרץ','אפר','מאי','יונ','יול','אוג','ספט','אוק','נוב','דצמ'][+iso.slice(5, 7) - 1];
+  return `<div class="date"><b>${+iso.slice(8, 10)}</b><span>${mon}</span></div>`;
+};
+const avatar = (s) => `<div class="avatar">${esc((s.first_name[0] || '') + (s.last_name[0] || ''))}</div>`;
 
 function toast(msg, bad) {
   const t = $('#toast'); t.textContent = msg; t.className = bad ? 'bad' : ''; t.hidden = false;
@@ -46,10 +52,10 @@ async function loadTeacher() {
   const [students, lessons] = await Promise.all([api('/api/students'), api('/api/lessons')]);
   $('#studentSelect').innerHTML = students.map((s) => `<option value="${s.id}">${esc(s.first_name)} ${esc(s.last_name)}</option>`).join('');
   $('#students').innerHTML = students.length ? students.map((s) => `
-    <div class="row"><div>${esc(s.first_name)} ${esc(s.last_name)}<small dir="ltr">+${esc(s.phone)} · ${esc(s.email)}</small></div>
+    <div class="row">${avatar(s)}<div class="grow"><strong>${esc(s.first_name)} ${esc(s.last_name)}</strong><small dir="ltr">+${esc(s.phone)} · ${esc(s.email)}</small></div>
     <button class="danger" data-del-student="${s.id}">מחק</button></div>`).join('') : '<p class="empty">עוד אין תלמידים</p>';
   $('#lessons').innerHTML = lessons.length ? lessons.map((l) => `
-    <div class="row"><div>${esc(l.first_name)} ${esc(l.last_name)}<small>${fmt(l.starts_at)} · ${modeText(l)}</small></div>
+    <div class="row">${dateBox(l.starts_at)}<div class="grow"><strong>${esc(l.first_name)} ${esc(l.last_name)}</strong> ${badge(l)}<small>${l.starts_at.slice(11, 16)}${l.mode === 'physical' ? ' · ' + esc(l.address) : ''}</small></div>
     <div class="actions">
       <button data-wa="${l.id}">שלח שוב בוואצפ</button>
       ${l.mode === 'zoom' ? `<button data-wa="${l.id}" data-kind="zoom">שלח קישור זום</button>` : ''}
@@ -99,8 +105,8 @@ document.addEventListener('click', async (e) => {
 async function loadStudent() {
   const ls = await api('/api/my-lessons');
   $('#myLessons').innerHTML = ls.length ? ls.map((l) => `
-    <div class="row"><div>${fmt(l.starts_at)}<small>${modeText(l)}</small></div>
-    ${l.mode === 'zoom' && l.zoom_link ? `<a href="${esc(l.zoom_link)}" target="_blank" rel="noopener">קישור לזום</a>` : ''}</div>`).join('') : '<p class="empty">אין שיעורים קבועים</p>';
+    <div class="row">${dateBox(l.starts_at)}<div class="grow"><strong>${l.starts_at.slice(11, 16)}</strong> ${badge(l)}<small>${l.mode === 'physical' ? esc(l.address) : 'השיעור מתקיים בזום'}</small></div>
+    ${l.mode === 'zoom' && l.zoom_link ? `<a class="btn" href="${esc(l.zoom_link)}" target="_blank" rel="noopener">הצטרפות לזום</a>` : ''}</div>`).join('') : '<p class="empty">אין שיעורים קבועים</p>';
 }
 
 init();
