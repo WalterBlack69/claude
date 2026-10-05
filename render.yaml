@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: private-lessons
+    runtime: docker
+    plan: starter            # a persistent disk requires a paid plan
+    envVars:
+      - key: GOOGLE_CLIENT_ID
+        value: 820489399724-2jck0ivddfo4h18tlrblfmg4fj355f75.apps.googleusercontent.com
+      - key: TEACHER_EMAILS
+        sync: false          # you enter it in the Render dashboard
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: PORT
+        value: "3000"
+    disk:
+      name: lessons-data
+      mountPath: /data
+      sizeGB: 1
